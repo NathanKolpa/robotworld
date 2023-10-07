@@ -7,3 +7,6 @@
 /docs/generated
 /configure~
 /RobotWorld.cppcheck
+.idea
+linux
+build
