@@ -638,7 +638,14 @@ namespace Application
 	 */
 	void MainFrameWindow::OnStartRobot( wxCommandEvent& UNUSEDPARAM(anEvent))
 	{
-		Model::RobotPtr robot = Model::RobotWorld::getRobotWorld().getRobot( "Robot");
+        std::string worldName = "Robot";
+
+        if (MainApplication::isArgGiven( "-world"))
+        {
+            worldName = MainApplication::getArg( "-world").value;
+        }
+
+		Model::RobotPtr robot = Model::RobotWorld::getRobotWorld().getRobot( worldName);
 		if (robot && !robot->isActing())
 		{
 			robot->startActing();
@@ -649,8 +656,15 @@ namespace Application
 	 */
 	void MainFrameWindow::OnStopRobot( wxCommandEvent& UNUSEDPARAM(anEvent))
 	{
-		Model::RobotPtr robot = Model::RobotWorld::getRobotWorld().getRobot( "Robot");
-		if (robot && robot->isActing())
+        std::string worldName = "Robot";
+
+        if (MainApplication::isArgGiven( "-world"))
+        {
+            worldName = MainApplication::getArg( "-world").value;
+        }
+
+        Model::RobotPtr robot = Model::RobotWorld::getRobotWorld().getRobot( worldName);
+        if (robot && robot->isActing())
 		{
 			robot->stopActing();
 		}
@@ -660,11 +674,18 @@ namespace Application
 	 */
 	void MainFrameWindow::OnPopulate( wxCommandEvent& UNUSEDPARAM(anEvent))
 	{
+        std::string worldName = "Robot";
+
+        if (MainApplication::isArgGiven( "-world"))
+        {
+            worldName = MainApplication::getArg( "-world").value;
+        }
+
 		switch(worldNumber->GetSelection())
 		{
 			case 0:
 			{
-				robotWorldCanvas->populate( 4);
+				robotWorldCanvas->populate( 4, worldName);
 				// TODO Do something...
 //				std::shared_ptr<View::RobotShape> robotShape = std::dynamic_pointer_cast<View::RobotShape>(robotWorldCanvas->getSelectedShape());
 //				if(robotShape)
@@ -708,8 +729,15 @@ namespace Application
 	 */
 	void MainFrameWindow::OnStartListening( wxCommandEvent& UNUSEDPARAM(anEvent))
 	{
-		Model::RobotPtr robot = Model::RobotWorld::getRobotWorld().getRobot( "Robot");
-		if (robot)
+        std::string worldName = "Robot";
+
+        if (MainApplication::isArgGiven( "-world"))
+        {
+            worldName = MainApplication::getArg( "-world").value;
+        }
+
+        Model::RobotPtr robot = Model::RobotWorld::getRobotWorld().getRobot( worldName);
+        if (robot)
 		{
 			robot->startCommunicating();
 		}
@@ -719,7 +747,14 @@ namespace Application
 	 */
 	void MainFrameWindow::OnSendMessage( wxCommandEvent& UNUSEDPARAM(anEvent))
 	{
-		Model::RobotPtr robot = Model::RobotWorld::getRobotWorld().getRobot( "Robot");
+        std::string worldName = "Robot";
+
+        if (MainApplication::isArgGiven( "-world"))
+        {
+            worldName = MainApplication::getArg( "-world").value;
+        }
+
+        Model::RobotPtr robot = Model::RobotWorld::getRobotWorld().getRobot( worldName);
 		if (robot)
 		{
 			std::string remoteIpAdres = "localhost";
@@ -733,6 +768,7 @@ namespace Application
 			{
 				remotePort = MainApplication::getArg( "-remote_port").value;
 			}
+            std::cout << "Remote port: " << remotePort << std::endl;
 
 			// We will request an echo message. The response will be "Hello World", if all goes OK,
 			// "Goodbye cruel world!" if something went wrong.
@@ -748,8 +784,15 @@ namespace Application
 	 */
 	void MainFrameWindow::OnStopListening( wxCommandEvent& UNUSEDPARAM(anEvent))
 	{
-		Model::RobotPtr robot = Model::RobotWorld::getRobotWorld().getRobot( "Robot");
-		if (robot)
+        std::string worldName = "Robot";
+
+        if (MainApplication::isArgGiven( "-world"))
+        {
+            worldName = MainApplication::getArg( "-world").value;
+        }
+
+        Model::RobotPtr robot = Model::RobotWorld::getRobotWorld().getRobot( worldName);
+        if (robot)
 		{
 			robot->stopCommunicating();
 		}

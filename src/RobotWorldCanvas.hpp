@@ -165,7 +165,7 @@ namespace View
 			/**
 			 * Asks the world to populates itself with a robot, a goal and the given number of walls
 			 */
-			void populate( int aNumberOfWalls = 2);
+			void populate( int aNumberOfWalls, const std::string& robotName);
 			/**
 			 * Removes everything from the world
 			 */

@@ -55,3 +55,4 @@ MainSettings.hpp is een collectie van meerdere singletons:
 - settings
 - args
 - cmd files
+- robotworld
