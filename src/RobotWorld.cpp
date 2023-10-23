@@ -274,9 +274,9 @@ namespace Model
 	/**
 	 *
 	 */
-	void RobotWorld::populate( int UNUSEDPARAM(aNumberOfWalls), const std::string& robotName)
+	void RobotWorld::populate( int UNUSEDPARAM(aNumberOfWalls))
 	{
-		RobotWorld::getRobotWorld().newRobot( robotName, wxPoint(163,111),false); // @suppress("Avoid magic numbers")
+		RobotWorld::getRobotWorld().newRobot( "Robot", wxPoint(163,111),false); // @suppress("Avoid magic numbers")
 
 //		static const wxPoint coordinates[] = {
 //			wxPoint( 100, 25), wxPoint( 700, 25),

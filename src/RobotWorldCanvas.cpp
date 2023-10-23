@@ -441,9 +441,9 @@ namespace View
 	/**
 	 *
 	 */
-	void RobotWorldCanvas::populate( int aNumberOfWalls /*= 2*/, const std::string& robotName)
+	void RobotWorldCanvas::populate( int aNumberOfWalls /*= 2*/)
 	{
-		Model::RobotWorld::getRobotWorld().populate(aNumberOfWalls, robotName);
+		Model::RobotWorld::getRobotWorld().populate(aNumberOfWalls);
 	}
 	/**
 	 *

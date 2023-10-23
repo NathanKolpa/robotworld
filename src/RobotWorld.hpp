@@ -126,7 +126,7 @@ namespace Model
 			/**
 			 *
 			 */
-			void populate( int aNumberOfWalls, const std::string& robotName);
+			void populate( int aNumberOfWalls = 2);
 			/**
 			 *
 			 */
