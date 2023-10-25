@@ -17,10 +17,34 @@ MVC (Model view controller) is een patroon waarbij de applicatie in 3 hoofd cate
 met ieder zijn eigen verantwoordelijkheid:
 
 - Model: klassen die een abstracte weergave bieden van de logica en data binnen de applicatie.
-- View: klassen die verantwoordelijk zijn over hoe de weergave (in dit geval een gui) van een applicatie wordt getoont.
+- View: klassen die verantwoordelijk zijn over hoe de weergave (in dit geval een gui) van een applicatie wordt getoond.
 - Controller: klassen of functies die een event afhandelen met behulp van de *Model* en het resultaat hiervan
   presenteert via de *View*.
   Controllers maken idealiter gebruik van alleen hoge level abstracties en bieden een globale weergave van een actie.
+
+In robotworld zijn de controllers niet expliciet benoemd, maar zijn wel te identificeren binnen de MainFrameWindow
+klasse.
+Voor het afhandelen van input (in dit geval gui knoppen) kun je iedere handler/callback zien als een aparte controller.
+De reden waarom deze handlers controllers zijn is omdat hier de view (indirect) wordt bijgewerkt op basis van model
+klassen.
+Een goed voorbeeld hiervan is op regel 709:
+
+```cpp
+// deze functie wordt aangeroepen door wxWidgets na het klikken van een knop.
+void MainFrameWindow::OnStartListening( wxCommandEvent& UNUSEDPARAM(anEvent))
+{
+    // Logica vanuit model klassen.
+    Model::RobotPtr robot = Model::RobotWorld::getRobotWorld().getRobot( "Robot");
+    if (robot)
+    {
+        // doormiddel van threads en het observer pattern wordt de view bijgewerkt.
+        robot->startCommunicating();
+    }
+}
+```
+
+De code waarmee wij de applicatie hebben uitgebreid die netwerk pakketjes afhandelen kunnen ook beschouwd worden als controller code.
+Maar in tegenstelling tot de bestaande code is de view van onze uitgebreide code netwerk IO.
 
 # Gebruik van patronen
 
@@ -114,10 +138,6 @@ NotificationHandler.hpp 31:
 Connect( EVT_NOTIFICATIONEVENT,
 (wxObjectEventFunction)(wxEventFunction)reinterpret_cast< NotificationEventFunction >( &NotificationHandler::OnNotificationEvent));
 ```
-
-De schrijver van de code lijkt er wel bewust van te zijn dat dit een slecht idee is, want het is voorzien met de
-volgende comment:
-`// TODO: Change this code so we don't have to use the #pragma's nor the reinterpret_cast.`
 
 ## Alle symbolen moeten in een namespace (AV Rule 98)
 
