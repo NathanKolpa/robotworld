@@ -67,6 +67,8 @@ namespace Model
 		{
 			stopCommunicating();
 		}
+
+        std::cout << "Remove robot\n";
 	}
 	/**
 	 *
@@ -424,12 +426,12 @@ namespace Model
 		try
 		{
 			// The runtime value always wins!!
-			speed = static_cast<float>(Application::MainApplication::getSettings().getSpeed());
+			speed = static_cast<float>(Application::MainApplication::getSettings().getSpeed()) / static_cast<double>(10.0);
 
 			// Compare a float/double with another float/double: use epsilon...
 			if (std::fabs(speed - 0.0) <= std::numeric_limits<float>::epsilon())
 			{
-				setSpeed(10.0, false); // @suppress("Avoid magic numbers")
+				setSpeed(1.0, false); // @suppress("Avoid magic numbers")
 			}
 
 			// We use the real position for starters, not an estimated position.
@@ -454,7 +456,7 @@ namespace Model
 				notifyObservers();
 
 				// If there is no sleep_for here the robot will immediately be on its destination....
-				std::this_thread::sleep_for( std::chrono::milliseconds( 100)); // @suppress("Avoid magic numbers")
+				std::this_thread::sleep_for( std::chrono::milliseconds( 10)); // @suppress("Avoid magic numbers")
 
 				// this should be the last thing in the loop
 				if(driving == false)

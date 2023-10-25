@@ -102,6 +102,8 @@ namespace View
 		{
 			delete notificationHandler;
 		}
+
+        std::cout << "Remove canvas\n";
 	}
 	/**
 	 *
