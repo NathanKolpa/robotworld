@@ -1,0 +1,13 @@
+@startuml
+
+left to right direction
+
+package Application {}
+package Base {}
+package Messaging {}
+package Model {}
+package PathAlgorithm {}
+package Utils {}
+package View {}
+
+@enduml

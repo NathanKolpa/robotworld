@@ -1,0 +1,164 @@
+@startuml
+
+left to right direction
+
+package Application {
+    class CommandlineArgument {}
+    class Logger {}
+    class LogTextCtrl {}
+    class MainApplication {
+        getSettings(): MainSettings
+    }
+    class MainFrameWindow {}
+    class MainSettings {}
+    class WidgetTraceFunction {
+        trace()
+    }
+
+    MainApplication "1" -- "1" MainSettings
+    MainApplication "1" -- "0..*" CommandlineArgument
+}
+
+package Base {
+    class FileTraceFunction {
+        trace()
+    }
+    class GMTOffset {}
+    class ITraceFunction {
+        trace()
+    }
+    class NotificationFunctionType {}
+    class NotificationHandler {}
+    class Notifier {
+        notifyObservers()
+        addObserver (Observer &anObserver)
+    }
+    class ObjectId {}
+    class Observer {
+        handleNotificationsFor (Notifier &aNotifier)
+    }
+    class Queue {}
+    class StdOutTraceFunction {
+        trace()
+    }
+    class Trace {}
+
+    Notifier "1" -- "*" Observer : Updates >
+    ITraceFunction <|-- FileTraceFunction
+    ITraceFunction <|-- StdOutTraceFunction
+}
+
+
+package Messaging {
+    class Client {}
+    class ClientSession {}
+    class CommunicationService {
+        getCommunicationService ()
+    }
+    class Message {}
+    class MessageHeader {}
+    class MessageHandler {}
+    class RequestHandler {}
+    class ResponseHandler {}
+    class Server {}
+    class ServerSession {}
+    class Session {}
+
+    CommunicationService "1" -- "*" Server
+
+    Session <|--- ServerSession
+    Session <|--- ClientSession
+
+    Client ..|> Message
+    Message "1" -- "1" MessageHeader
+
+    ClientSession -- "1" ResponseHandler
+    ClientSession -- "1" Message
+
+    MessageHandler --|> ResponseHandler
+    MessageHandler --|> RequestHandler
+
+    Message -- Session
+}
+
+package Model {
+    class BoundedVector {}
+    class Goal {}
+    class ModelObject {}
+    class Robot {}
+    class RobotWorld {
+        getRobotWorld
+    }
+    class Wall {}
+    class WayPoint {}
+
+    ModelObject <|-- BoundedVector
+    ModelObject <|-- Robot
+    ModelObject <|-- RobotWorld
+    ModelObject <|-- Wall
+    ModelObject <|-- WayPoint
+    WayPoint <|-- Goal
+
+    RobotWorld -- "*" Robot
+    RobotWorld -- "*" WayPoint
+    RobotWorld -- "*" Goals
+    RobotWorld -- "*" Walls
+}
+
+package PathAlgorithm {
+    class AStar {}
+    class Edge {}
+    class Vertex {}
+
+    AStar "1" -- "*" Vertex
+    Edge "*" -- "2" Vertex
+}
+
+package Utils {
+    class MathUtils {}
+    class Shape2DUtils {}
+}
+package View {
+    class ViewObject {}
+    class GoalShape {}
+    class LineShape {}
+    class RectangleShape {}
+    class RobotShape {}
+    class RobotWorldCanvas {}
+    class Shape {}
+    class ShapeData {}
+    class WallShape {}
+    class WayPointShape {}
+
+    Shape --|> ViewObject
+    RectangleShape --|> Shape
+    WayPointShape --|> RectangleShape
+    RobotShape --|> RectangleShape
+    GoalShape --|> WayPointShape
+    RectangleShape --|> Shape
+    WallShape --|> LineShape
+    LineShape --|> Shape
+    Shape -- "1" ShapeData
+    RobotWorldCanvas --|> Shape
+
+    RobotWorldCanvas -- "*" Shape: Draws >
+}
+
+Observer <|-- ViewObject
+ObjectId "1" -- ViewObject
+
+MainFrameWindow ..|> RobotWorld
+MainFrameWindow ..|> Client
+
+AStar <|-- ModelObject
+Robot ..|> AStar
+
+Notifier <|-- ModelObject
+MessageHandler <|-- Robot
+Observer <|-- Robot
+
+ITraceFunction <|-- WidgetTraceFunction
+
+RobotShape ..|> Robot
+
+@enduml

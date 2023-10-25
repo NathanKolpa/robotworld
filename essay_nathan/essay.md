@@ -9,7 +9,23 @@ titlepage-rule-color: "360049"
 titlepage-background: "backgrounds/background1.pdf"
 ---
 
-# Design
+# Packages
+
+![Package diagram robotworld](packages.svg)
+
+| Namespace     | Uitleg                                                                    |
+|:--------------|:--------------------------------------------------------------------------|
+| View          | Klassen die zich bezig houden met presentatie (xwWidgets gui)             |
+| Utils         | Overige helper functies                                                   |
+| PathAlgorithm | Klassen die zich bezig houden met het berekenen van het pad (AStar)       |
+| Model         | Het data model van de applicatie / een implementatie van het domein model |
+| Messaging     | Netwerk communicatie                                                      |
+| Base          | Basis structuren en patronen                                              |
+| Application   | Hoge level abstracties die de algemene flow van de applicatie bepalen.    |
+
+# Klassen
+
+![Class diagram robotworld](classes.svg)
 
 # MVC
 
@@ -43,16 +59,71 @@ void MainFrameWindow::OnStartListening( wxCommandEvent& UNUSEDPARAM(anEvent))
 }
 ```
 
-De code waarmee wij de applicatie hebben uitgebreid die netwerk pakketjes afhandelen kunnen ook beschouwd worden als controller code.
+De code waarmee wij de applicatie hebben uitgebreid die netwerk pakketjes afhandelen kunnen ook beschouwd worden als
+controller code.
 Maar in tegenstelling tot de bestaande code is de view van onze uitgebreide code netwerk IO.
 
 # Gebruik van patronen
 
 ## Observer
 
+Het observer pattern dat wordt gebruikt om een een-op-veel-relatie tussen objecten te definiëren, zodat wanneer het ene
+object verandert, al zijn afhankelijke objecten
+automatisch op de hoogte worden gebracht en worden bijgewerkt.
+Het doel van het observer pattern is om een manier te bieden om onderlinge afhankelijkheden tussen objecten te beheren,
+waardoor ze losjes gekoppeld
+blijven.
+
+Er zijn 4 klassen die een rol spelen bij dit pattern:
+
+* Subject: Dit is het object dat wordt geobserveerd en dat een lijst met observers bijhoudt. Het subject
+  voorziet methoden om observers toe te voegen, te verwijderen en op de hoogte te stellen van wijzigingen.
+
+* Observer: Dit zijn de objecten die geïnteresseerd zijn in de wijzigingen van het onderwerp.
+  Ze registreren zichzelf bij het onderwerp en worden op de hoogte gebracht wanneer er veranderingen optreden.
+
+* ConcreteSubject: Dit is een specifieke implementatie van het Subject-interface.
+  Het houdt de staat bij die wordt waargenomen en stuurt kennisgevingen naar de geregistreerde observers bij
+  wijzigingen.
+
+* ConcreteObserver: Dit is een specifieke implementatie van het Observer-interface.
+  Het reageert op de kennisgevingen van het onderwerp en voert de gewenste acties uit wanneer er veranderingen zijn.
+
+In robotworld is dit patroon toegepast voor het bewegen van een robot en het bijwerken van de canvas:
+
+|     Abstract     | Robotworld                                                                                                                              |
+|:----------------:|:----------------------------------------------------------------------------------------------------------------------------------------|
+|     Subject      | `Notifier`, een abstracte klasse en houd een lijst bij van `Observer`s en roept `handleNotification()` aan wanneer er een update is.    |
+| ConcreteSubject  | `Robot`, implemented de abstracte klasse `Notifier`. Wanneer robot van state verandert, roept robot zelf `notifyObservers()` aan.       |
+|     Observer     | `Observer`, een abstracte klasse en heeft een `vitual` method `handleNotification()`.                                                   |
+| ConcreteObserver | `RobotShape`, implemented de abstracte klasse `Obsever` en observed de robot zodat de canvas bijgewerkt wordt wanneer de robot beweegt. |
+
 ## Singleton
 
+Het doel van het Singleton-pattern is om ervoor te zorgen dat er slechts één enkele instantie van een klasse wordt
+gecreëerd en dat deze toegankelijk is vanuit elke plek in de applicatie.
+
+In robot world zijn er een aantal singletons:
+
+- `CommunicationService`
+- `RobotWorld`
+- `MainSettings`
+
 ## Strategy
+
+Het doel van het Strategy-pattern is om gedrag in een applicatie te encapsuleren en deze gedragsalgoritmes
+uitwisselbaar te maken.
+Hierdoor kunnen cliënten van een klasse hun gedrag dynamisch aanpassen zonder de klasse zelf te
+wijzigen.
+
+Dit is in de applicatie gerealiseerd met de volgende klassen:
+
+| Abstract                 | Robotworld          |
+|:-------------------------|:--------------------|
+| Strategy                 | ITraceFunction      |
+| Strategy (implementatie) | StdOutTraceFunction |
+| Strategy (implementatie) | FileTraceFunction   |
+| Strategy (implementatie) | WidgetTraceFunction |
 
 # Toepassen van code standaarden.
 
@@ -146,3 +217,51 @@ Connect( EVT_NOTIFICATIONEVENT,
 Om er voor te voorkomen dat namen van functies, klassen, etc... (symbolen) niet botsen, is het aangeraden om alle
 symbolen in een namespace te zetten.
 Deze regel wordt goed toegepast, er lijkt echter wel 1 slordigheidsfoutje in te zitten in Widgets.hpp regel 50.
+
+# Multi-threading
+
+De code die verantwoordelijk is voor het rijden van een robot wordt voor iedere robot apart uitgevoerd op een andere
+thread.
+Deze aanpak is niet per-se fout, maar het gebruik van meerdere threads binnen een applicatie bengt behoorlijk wat
+complexiteit met zich mee.
+Want, de code moet rekening houden met synchronisatie van meerdere threads, het veilig omgaan van toegang en mutatie,
+deadlocks en race conditions.
+
+Een aantal van de bovengenoemde punten zijn binnen robotworld niet correct geïmplementeerd.
+Het is ook niet in comments of documentatie aangegeven over hoe functies thread safe of unsafe zijn, terwijl dit zeker
+hele relevante informatie is.
+Voor deze redenen heb ik iedere regel **heel** zorgvuldig moeten lezen om te bepalen of de applicatie geen undefined
+behaviour bevat.
+Een voorbeeld hoe een use after free kan voorkomen binnen robotworld door het gebruik van meerdere threads.
+
+1. De main thread roept `robot.startActing()` aan.
+2. De `startActing()` methode start een nieuwe thread aan die de robot laat bewegen.
+3. Als de robot beweegt wordt `notifyObservers()` aangeroepen.
+4. Omdat in RobotWorldCanvas.cpp regel 1169 robotShape de robot observed probeert de secundaire thread geheugen binnen
+   deze robotShape aan te passen.
+5. Omdat de RobotWorldCanvas altijd eerder out of scope gaat dan een Robot object, kan het voor komen de robotShape niet
+   meer bestaat tijdens het voorgenoemde punt.
+
+Je kan dit gedrag (redelijk betrouwbaar) triggeren door de robot te starten, en tijdens dat de robot beweegt de
+applicatie af te sluiten.
+Het is een race-condition dus soms seg-fault de applicatie en soms niet.
+
+# Configuratie via de command line
+
+Een verbeterpunt op basis van software design is hoe de applicatie wordt geconfigureerd.
+De klassen MainApplication en MainFrameWindow gebruiken heel specifiek command-line argumenten.
+In de toekomst zou het bijvoorbeeld kunnen voorkomen dat een MainFrameWindow configuratie accepteert van een andere bron
+zoals een bestand.
+Als dat het geval is moeten deze veel aanpassingen ondergaan en dit is een teken dat de applicatie een hoge coupling
+heeft.
+
+Een voorbeeld hoe configuratie (hier een voorbeeld van `-local_ip`) beter kan afgehandeld kan worden
+is met behulp van een techniek/patroon genaamd dependency injection:
+Tijdens het aanmaken van MainFrameWindow neemt de constructor een argument van het type `Client`.
+Welke configuratie het `Client` object nodig heeft, is nu niet meer de verantwoordelijkheid van `MainFrameWindow` maar
+wordt
+gedelegeerd naar de caller.
+Als client bijvoorbeeld een waarde accepteert dat afkomstig is vanuit een andere bron dan hoeft alleen de waarde in de
+constructor aangepast te worden.
+Hoe deze waarde wordt berekend is dan nog een open vraagstuk maar de coupling binnen `MainFrameWindow` is dan wel een
+stuk lager.
