@@ -361,6 +361,8 @@ namespace Model {
                 break;
             }
             case Messaging::SynchronizeWall: {
+                syncWorld();
+
                 Messaging::SyncWallMessage wallMessage(aMessage.getBody());
 
                 WallPtr wall = RobotWorld::getRobotWorld().getWall(wallMessage.getId());
@@ -373,6 +375,9 @@ namespace Model {
                     TRACE_DEVELOP("CREATING WALL: " + wall->asDebugString());
                     RobotWorld::getRobotWorld().addWall(wall);
                 }
+
+                // trigger a redraw of the canvas through some callback spaghetti.
+                notifyObservers();
 
                 break;
             }
