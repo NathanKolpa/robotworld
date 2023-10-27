@@ -426,6 +426,7 @@ namespace View
 	 */
 	void RobotWorldCanvas::handleNotification()
 	{
+        TRACE_DEVELOP("NOTIFICATION!");
 		handleBackGroundNotification();
 	}
 	/**
@@ -784,8 +785,6 @@ namespace View
 	 */
 	void RobotWorldCanvas::handleKey( wxKeyEvent& event)
 	{
-		Application::Logger::log( __PRETTY_FUNCTION__);
-
 		switch (event.GetKeyCode())
 		{
 			case WXK_DELETE:
@@ -1003,6 +1002,7 @@ namespace View
 
 		Refresh();
 	}
+
 	/**
 	 *
 	 */

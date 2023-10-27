@@ -83,11 +83,13 @@ namespace View
 		if (getNode1()->getObjectId() == aRectangleShape->getObjectId())
 		{
 			getWall()->setPoint1( aRectangleShape->getCentre(), false);
+            getWall()->markAsModified();
 			return;
 		}
 		if (getNode2()->getObjectId() == aRectangleShape->getObjectId())
 		{
 			getWall()->setPoint2( aRectangleShape->getCentre(), false);
+            getWall()->markAsModified();
 			return;
 		}
 	}
@@ -140,4 +142,13 @@ namespace View
 		}
 		return os.str();
 	}
+
+    void WallShape::handleNotification() {
+        getNode1()->setCentre(getWall()->getPoint1());
+        getNode2()->setCentre(getWall()->getPoint2());
+
+        // Redraw should happen here however,
+        // we don't hold a reference to the canvas where we can trigger such an event.
+        // This problem only applies to updating walls
+
 } // namespace View

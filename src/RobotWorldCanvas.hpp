@@ -8,6 +8,7 @@
 #include "Shape.hpp"
 #include "ViewObject.hpp"
 #include "Widgets.hpp"
+#include "Trace.hpp"
 
 #include <vector>
 

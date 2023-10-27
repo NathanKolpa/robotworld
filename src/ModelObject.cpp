@@ -12,6 +12,10 @@ namespace Model
 	ModelObject::ModelObject() : objectId(Base::ObjectId::newObjectId())
 	{
 	}
+
+    ModelObject::ModelObject(Base::ObjectId objectId)
+        :objectId(objectId){}
+
 	/**
 	 *
 	 */

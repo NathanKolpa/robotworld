@@ -9,6 +9,7 @@ robotworld_SOURCES 	= 	AStar.cpp	\
 						Logger.cpp	\
 						LogTextCtrl.cpp	\
 						Main.cpp	\
+						SyncWallMessage.cpp \
 						MainApplication.cpp	\
 						MainFrameWindow.cpp	\
 						MainSettings.cpp	\

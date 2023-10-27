@@ -71,13 +71,19 @@ namespace Model
 								bool aNotifyObservers /*= true*/)
 	{
 		WallPtr wall = std::make_shared<Wall>( aPoint1, aPoint2);
-		walls.push_back( wall);
-		if (aNotifyObservers == true)
-		{
-			notifyObservers();
-		}
-		return wall;
+        addWall(wall, aNotifyObservers);
+        return wall;
 	}
+
+
+    void RobotWorld::addWall(WallPtr wall, bool aNotifyObservers) {
+        walls.push_back(wall);
+        if (aNotifyObservers == true)
+        {
+            notifyObservers();
+        }
+    }
+
 	/**
 	 *
 	 */
@@ -290,10 +296,10 @@ namespace Model
 //		}
 //
 //		RobotWorld::getRobotWorld().newGoal( "Goal", wxPoint(850, 500),false); // @suppress("Avoid magic numbers")
-		
+
 		RobotWorld::getRobotWorld().newWall( wxPoint(7,234), wxPoint(419,234) ,false); // @suppress("Avoid magic numbers")
 		RobotWorld::getRobotWorld().newGoal( "Goal", wxPoint(320,285),false); // @suppress("Avoid magic numbers")
-		
+
 
 		notifyObservers();
 	}

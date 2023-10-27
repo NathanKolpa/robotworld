@@ -6,6 +6,7 @@
 #include "LineShape.hpp"
 #include "RectangleShape.hpp"
 #include "Wall.hpp"
+#include "Trace.hpp"
 
 namespace View
 {
@@ -84,7 +85,10 @@ namespace View
 			 */
 			virtual std::string asDebugString() const override;
 			//@}
-		private:
+
+
+        virtual void handleNotification() override;
+    private:
 	};
 } // namespace View
 #endif // WALLSHAPE_HPP_

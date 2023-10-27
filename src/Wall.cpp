@@ -5,62 +5,82 @@
 
 #include <sstream>
 
-namespace Model
-{
-	/**
-	 *
-	 */
-	Wall::Wall( const wxPoint& aPoint1,
-				const wxPoint& aPoint2) :
-								point1( aPoint1),
-								point2( aPoint2)
-	{
-	}
-	/**
-	 *
-	 */
-	void Wall::setPoint1(	const wxPoint& aPoint1,
-							bool aNotifyObservers /*= true*/)
-	{
-		point1 = aPoint1;
-		if (aNotifyObservers == true)
-		{
-			notifyObservers();
-		}
-	}
-	/**
-	 *
-	 */
-	void Wall::setPoint2(	const wxPoint& aPoint2,
-							bool aNotifyObservers /*= true*/)
-	{
-		point2 = aPoint2;
-		if (aNotifyObservers == true)
-		{
-			notifyObservers();
-		}
-	}
-	/**
-	 *
-	 */
-	std::string Wall::asString() const
-	{
-		std::ostringstream os;
+namespace Model {
+    /**
+     *
+     */
+    Wall::Wall(const wxPoint &aPoint1,
+               const wxPoint &aPoint2) :
+            point1(aPoint1),
+            point2(aPoint2),
+            modified(true) {
+    }
 
-		os << "Wall: " << ModelObject::asString() << "," << Utils::Shape2DUtils::asString( point1) << " - " << Utils::Shape2DUtils::asString( point2);
 
-		return os.str();
-	}
-	/**
-	 *
-	 */
-	std::string Wall::asDebugString() const
-	{
-		std::ostringstream os;
+    Wall::Wall(
+            const Base::ObjectId& objectId,
+            const wxPoint& aPoint1,
+            const wxPoint& aPoint2):
+            ModelObject(objectId),
+            point1(aPoint1),
+            point2(aPoint2),
+            modified(true)
 
-		os << "Wall:\n";
-		os << ModelObject::asDebugString() << "\n"<< Utils::Shape2DUtils::asString( point1) << " - " << Utils::Shape2DUtils::asString( point2);
+    {}
 
-		return os.str();
-	}
+
+    /**
+     *
+     */
+    void Wall::setPoint1(const wxPoint &aPoint1,
+                         bool aNotifyObservers /*= true*/) {
+        point1 = aPoint1;
+        if (aNotifyObservers == true) {
+            notifyObservers();
+        }
+    }
+
+    void Wall::markAsModified() { modified = true; }
+
+    bool Wall::takeIsModified() {
+        bool oldValue = modified;
+        modified = false;
+        return oldValue;
+    }
+
+    /**
+     *
+     */
+    void Wall::setPoint2(const wxPoint &aPoint2,
+                         bool aNotifyObservers /*= true*/) {
+        point2 = aPoint2;
+        if (aNotifyObservers == true) {
+            notifyObservers();
+        }
+    }
+
+    /**
+     *
+     */
+    std::string Wall::asString() const {
+        std::ostringstream os;
+
+        os << "Wall: " << ModelObject::asString() << "," << Utils::Shape2DUtils::asString(point1) << " - "
+           << Utils::Shape2DUtils::asString(point2);
+
+        return os.str();
+    }
+
+    /**
+     *
+     */
+    std::string Wall::asDebugString() const {
+        std::ostringstream os;
+
+        os << "Wall:\n";
+        os << ModelObject::asDebugString() << "\n" << Utils::Shape2DUtils::asString(point1) << " - "
+           << Utils::Shape2DUtils::asString(point2);
+
+        return os.str();
+    }
 } // namespace Model

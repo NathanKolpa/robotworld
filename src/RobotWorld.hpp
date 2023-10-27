@@ -59,6 +59,9 @@ namespace Model
 			WallPtr newWall(const wxPoint& aPoint1,
 							const wxPoint& aPoint2,
 							bool aNotifyObservers = true);
+
+            void addWall(WallPtr wall, bool aNotifyObservers = true);
+
 			/**
 			 *
 			 */

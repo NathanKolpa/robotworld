@@ -30,7 +30,9 @@ namespace Model
 			 *
 			 */
 			ModelObject();
-			/**
+
+            ModelObject(Base::ObjectId objectId);
+            /**
 			 * ModelObject may not be copied
 			 */
 			ModelObject( const ModelObject& aModelObject) = delete;

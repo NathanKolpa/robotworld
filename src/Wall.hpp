@@ -22,6 +22,12 @@ namespace Model
 			 */
 			Wall(	const wxPoint& aPoint1,
 					const wxPoint& aPoint2);
+
+        Wall(
+                const Base::ObjectId& objectId,
+                const wxPoint& aPoint1,
+                 const wxPoint& aPoint2);
+
 			/**
 			 *
 			 */
@@ -59,10 +65,16 @@ namespace Model
 			 */
 			virtual std::string asDebugString() const override;
 			//@}
+
+            bool takeIsModified();
+            void markAsModified();
+
+
 		protected:
 		private:
 			wxPoint point1;
 			wxPoint point2;
+            bool modified;
 	};
 } // namespace Model
 #endif // WALL_HPP_

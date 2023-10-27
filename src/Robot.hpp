@@ -252,6 +252,9 @@ namespace Model
 			wxPoint startPosition;
 			//@}
 
+            void syncWorld();
+
+            void sendMessage(const Messaging::Message& msg);
 		protected:
 			/**
 			 *
