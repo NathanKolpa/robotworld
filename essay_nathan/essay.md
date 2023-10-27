@@ -9,6 +9,16 @@ titlepage-rule-color: "360049"
 titlepage-background: "backgrounds/background1.pdf"
 ---
 
+# Introductie
+
+Dit essay zal zich richten op het analyseren van de architectuur en kwaliteit van de code in "robotworld".
+Ik zal de structuur en organisatie van de code onderzoeken, de gebruikte ontwerpbeslissingen evalueren en de
+codekwaliteit beoordelen aan de hand van relevante
+criteria.
+Het doel is om een diepgaand inzicht te krijgen in hoe goed de code is geschreven en hoe goed deze is
+aangepast aan het beoogde doel, met speciale aandacht voor design conventies, design principes, patronen en andere
+mogelijke verbeteringen.
+
 # Packages
 
 ![Package diagram robotworld](packages.svg)
@@ -49,13 +59,13 @@ Een goed voorbeeld hiervan is op regel 709:
 // deze functie wordt aangeroepen door wxWidgets na het klikken van een knop.
 void MainFrameWindow::OnStartListening( wxCommandEvent& UNUSEDPARAM(anEvent))
 {
-    // Logica vanuit model klassen.
-    Model::RobotPtr robot = Model::RobotWorld::getRobotWorld().getRobot( "Robot");
-    if (robot)
-    {
-        // doormiddel van threads en het observer pattern wordt de view bijgewerkt.
-        robot->startCommunicating();
-    }
+// Logica vanuit model klassen.
+Model::RobotPtr robot = Model::RobotWorld::getRobotWorld().getRobot( "Robot");
+if (robot)
+{
+// doormiddel van threads en het observer pattern wordt de view bijgewerkt.
+robot->startCommunicating();
+}
 }
 ```
 
@@ -136,7 +146,9 @@ Om de omvang van mijn oordeel te limiteren behandel ik een selectie van vijf ric
 
 Tijdens het schrijven van code is het een goed idee om de hoeveelheid "clutter" te minimaliseren.
 Dit zorgt er voor de lezer, sneller en makkelijker de code kan lezen.
-Hier onder heb ik een aantal (niet alle) voorbeelden van weggecommente code:
+Deze regel heb ik uitgekozen omdat mij opviel tijdens het project hoe veel regels weggecommente code er in de bestanden
+staan.
+Hier onder heb ik een aantal voorbeelden:
 
 - MainFrameWindow.cpp regel: 699, 576
 - RobotWorldCanvas.cpp: 438, 292, 287
@@ -150,8 +162,7 @@ En voor mij het meest opvallende voorbeeld (AStar.cpp 130):
 while (!openSet.empty())
 ```
 
-De oplossing hiervoor is om de oude code de in een commit te zetten en daarna kun je de weggecommente code volledig
-weglaten.
+Het bovenstaande voorbeeld laat mij denken dat er nog een achterliggend probleem is op het gebied van communicatie.
 
 ## Gebruik van variable-width types (AV Rule 209)
 
