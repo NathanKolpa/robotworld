@@ -426,7 +426,6 @@ namespace View
 	 */
 	void RobotWorldCanvas::handleNotification()
 	{
-        TRACE_DEVELOP("NOTIFICATION!");
 		handleBackGroundNotification();
 	}
 	/**
