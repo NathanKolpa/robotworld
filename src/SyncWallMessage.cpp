@@ -54,5 +54,4 @@ namespace Messaging {
         return std::make_shared<Model::Wall>(getId(), getA(), getB());
     }
 
-
 } // Messaging

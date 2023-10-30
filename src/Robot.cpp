@@ -14,6 +14,7 @@
 #include "Wall.hpp"
 #include "WayPoint.hpp"
 #include "SyncWallMessage.hpp"
+#include "SyncRobotMessage.h"
 
 #include <chrono>
 #include <ctime>
@@ -411,6 +412,14 @@ namespace Model {
                 recalculate();
 
                 break;
+            }
+            case Messaging::SynchronizeRobot: {
+
+            }
+            case Messaging::CreateRobot: {
+                Messaging::CreateRobotMessage
+                const std::string &aName,
+                const wxPoint &aPosition
             }
             default: {
                 TRACE_DEVELOP(__PRETTY_FUNCTION__ + std::string(": default not implemented"));

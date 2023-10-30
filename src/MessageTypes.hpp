@@ -23,6 +23,7 @@ namespace Messaging
 		EchoResponse,
         Reset,
         SynchronizeWall,
+        SynchronizeRobot,
         Start
 	};
 	//@}
