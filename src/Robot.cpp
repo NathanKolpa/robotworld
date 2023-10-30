@@ -173,6 +173,7 @@ namespace Model {
      */
     void Robot::startDriving() {
         if (isMaster) {
+            sendReset();
             syncWorld();
             sendStart();
         }
@@ -377,6 +378,11 @@ namespace Model {
                 aMessage.setBody("Messaging::EchoResponse: " + aMessage.asString());
                 break;
             }
+            case Messaging::Reset: {
+                RobotWorld::getRobotWorld().resetWorld();
+                aMessage.setMessageType(Messaging::EchoResponse);
+                break;
+            }
             case Messaging::Start: {
                 if (!acting) {
                     TRACE_DEVELOP("Start on request of other");
@@ -536,6 +542,12 @@ namespace Model {
             return true;
         }
         return false;
+    }
+
+    void Robot::sendReset() {
+        Messaging::Message msg;
+        msg.setMessageType(Messaging::Reset);
+        sendMessage(msg);
     }
 
     void Robot::sendStart() {
