@@ -154,7 +154,7 @@ namespace Model {
 
     void Robot::startActingAsSlave() {
         // we ""prevent"" seg faults with this sleep.
-        std::this_thread::sleep_for(std::chrono::milliseconds(10)); // @suppress("Avoid magic numbers")
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000)); // @suppress("Avoid magic numbers")
         acting = true;
         std::thread newRobotThread([this] { startDriving(); });
         robotThread.swap(newRobotThread);
@@ -177,7 +177,10 @@ namespace Model {
             sendReset();
             syncWorld();
             sendStart();
+
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         }
+
 
         driving = true;
 
@@ -409,8 +412,6 @@ namespace Model {
                 // trigger a redraw of the canvas through some callback spaghetti.
                 notifyObservers();
                 aMessage.setMessageType(Messaging::EchoResponse);
-                recalculate();
-
                 break;
             }
             case Messaging::SynchronizeRobot: {
@@ -572,6 +573,7 @@ namespace Model {
                 syncWallMessage.fillMessage(msg);
                 sendMessage(msg);
                 TRACE_DEVELOP("SENDING WALL: " + wall->asDebugString());
+                std::this_thread::sleep_for(std::chrono::milliseconds(100)); // @suppress("Avoid magic numbers")
             }
         }
     }

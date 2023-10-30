@@ -100,9 +100,8 @@ namespace Application
 
 			void OnDrawOpenSet( wxCommandEvent& anEvent);
 			void OnSpeedSpinCtrlUpdate( wxCommandEvent& anEvent);
-			void OnWorld1( wxCommandEvent& anEvent);
-			void OnWorld2( wxCommandEvent& anEvent);
-			void OnWorld3( wxCommandEvent& anEvent);
+			void OnWorld( wxCommandEvent& anEvent);
+
 
 			void OnStartRobot( wxCommandEvent& anEvent);
 			void OnStopRobot( wxCommandEvent& anEvent);
