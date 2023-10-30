@@ -417,7 +417,7 @@ namespace Model {
             case Messaging::SynchronizeRobot: {
                 Messaging::SyncRobotMessage robotMessage(aMessage.getBody());
 
-                RobotPtr robot = RobotWorld::getRobotWorld().getRobot(robotMessage.getName());
+                RobotPtr robot = RobotWorld::getRobotWorld().getRobot("Bram");
                 if(robot) {
                     robotMessage.updateRobot(*robot);
                 }
@@ -428,8 +428,6 @@ namespace Model {
 
                 notifyObservers();
                 aMessage.setMessageType(Messaging::EchoResponse);
-                recalculate();
-
                 break;
             }
             default: {
@@ -518,6 +516,7 @@ namespace Model {
                 notifyObservers();
 
                 // If there is no sleep_for here the robot will immediately be on its destination....
+               sendPosition();
                 std::this_thread::sleep_for(std::chrono::milliseconds(10)); // @suppress("Avoid magic numbers")
 
                 // this should be the last thing in the loop
@@ -573,6 +572,13 @@ namespace Model {
     void Robot::sendStart() {
         Messaging::Message msg;
         msg.setMessageType(Messaging::Start);
+        sendMessage(msg);
+    }
+
+    void Robot::sendPosition() {
+        Messaging::SyncRobotMessage robotMessage(*this);
+        Messaging::Message msg;
+        robotMessage.fillMessage(msg);
         sendMessage(msg);
     }
 

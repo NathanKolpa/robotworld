@@ -256,6 +256,7 @@ namespace Model
             void sendStart();
             void sendReset();
             void startActingAsSlave();
+            void sendPosition();
 
             void sendMessage(const Messaging::Message& msg);
             void recalculate();

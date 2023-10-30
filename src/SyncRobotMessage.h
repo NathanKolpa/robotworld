@@ -12,8 +12,8 @@ namespace Messaging {
     class SyncRobotMessage {
     public:
         SyncRobotMessage(const std::string &message);
-        SyncRobotMessage(const Model::Robot robot);
-        SyncRobotMessage(const std::string &aName, const wxPoint aPosition, Model::BoundedVector aFront);
+        SyncRobotMessage(const Model::Robot& robot);
+        SyncRobotMessage( const wxPoint aPosition, Model::BoundedVector aFront);
 
         //getPosition, getFront
         virtual ~SyncRobotMessage() = default;
@@ -23,7 +23,6 @@ namespace Messaging {
 
         wxPoint getPosition() const;
         Model::BoundedVector getFront() const;
-        std::string getName() const;
 
         void updateRobot(Model::Robot& robot) const;
         Model::RobotPtr newRobot() const;
@@ -32,7 +31,6 @@ namespace Messaging {
     protected:
         void parse(const std::string& message);
     private:
-        std::string name;
         wxPoint position;
         Model::BoundedVector front;
     };
