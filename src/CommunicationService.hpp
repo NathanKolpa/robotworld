@@ -82,6 +82,8 @@ namespace Messaging
 			 */
 			void wait();
 
+            void step();
+
 		private:
 			/**
 			 *
@@ -94,19 +96,11 @@ namespace Messaging
 			/**
 			 *
 			 */
-			void start_io_context_thread();
-			/**
-			 *
-			 */
 			void run_io_context();
 			/**
 			 *
 			 */
 			boost::asio::io_context io_context;
-			/**
-			 *
-			 */
-			std::thread io_contextThread;
 			/**
 			 *
 			 */

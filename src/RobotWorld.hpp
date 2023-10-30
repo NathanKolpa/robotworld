@@ -163,6 +163,7 @@ namespace Model
 			virtual std::string asDebugString() const override;
 			//@}
 
+            void step(int msInterval);
 		protected:
 			/**
 			 *

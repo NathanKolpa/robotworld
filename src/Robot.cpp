@@ -153,11 +153,8 @@ namespace Model {
     }
 
     void Robot::startActingAsSlave() {
-        // we ""prevent"" seg faults with this sleep.
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000)); // @suppress("Avoid magic numbers")
         acting = true;
-        std::thread newRobotThread([this] { startDriving(); });
-        robotThread.swap(newRobotThread);
+        startDriving();
     }
 
     /**
@@ -166,7 +163,6 @@ namespace Model {
     void Robot::stopActing() {
         acting = false;
         driving = false;
-        robotThread.join();
     }
 
     /**
@@ -177,17 +173,13 @@ namespace Model {
             sendReset();
             syncWorld();
             sendStart();
-
-            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         }
 
-
+        pathPoint = 0;
         driving = true;
 
         goal = RobotWorld::getRobotWorld().getGoal("Goal");
         recalculate();
-
-        drive();
     }
 
     void Robot::recalculate() {
@@ -361,8 +353,6 @@ namespace Model {
         }
     }
 
-    static std::mutex wallUpdateMutex;
-
     /**
      *
      */
@@ -485,58 +475,39 @@ namespace Model {
         return os.str();
     }
 
-    /**
-     *
-     */
-    void Robot::drive() {
-        try {
-            // The runtime value always wins!!
-            speed = static_cast<float>(Application::MainApplication::getSettings().getSpeed()) /
-                    static_cast<float>(10.0);
+    void Robot::step(int msInterval) {
+        if (!driving) {
+            return;
+        }
 
-            // Compare a float/double with another float/double: use epsilon...
-            if (std::fabs(speed - 0.0) <= std::numeric_limits<float>::epsilon()) {
-                setSpeed(1.0, false); // @suppress("Avoid magic numbers")
+        // The runtime value always wins!!
+        speed = static_cast<float>(Application::MainApplication::getSettings().getSpeed()) /
+                static_cast<float>(10.0);
+
+        // Compare a float/double with another float/double: use epsilon...
+        if (std::fabs(speed - 0.0) <= std::numeric_limits<float>::epsilon()) {
+            setSpeed(1.0, false); // @suppress("Avoid magic numbers")
+        }
+
+        // We use the real position for starters, not an estimated position.
+        startPosition = position;
+
+        if (position.x > 0 && position.x < 500 && position.y > 0 && position.y < 500 &&
+            pathPoint < path.size()) {
+            // Do the update
+            const PathAlgorithm::Vertex &vertex = path[pathPoint += static_cast<unsigned int>(speed)];
+            front = BoundedVector(vertex.asPoint(), position);
+            position.x = vertex.x;
+            position.y = vertex.y;
+
+            // Stop on arrival or collision
+            if (arrived(goal) || collision()) {
+                Application::Logger::log(__PRETTY_FUNCTION__ + std::string(": arrived or collision"));
+                driving = false;
             }
 
-            // We use the real position for starters, not an estimated position.
-            startPosition = position;
-
-            unsigned pathPoint = 0;
-            while (position.x > 0 && position.x < 500 && position.y > 0 && position.y < 500 &&
-                   pathPoint < path.size()) // @suppress("Avoid magic numbers")
-            {
-                // Do the update
-                const PathAlgorithm::Vertex &vertex = path[pathPoint += static_cast<unsigned int>(speed)];
-                front = BoundedVector(vertex.asPoint(), position);
-                position.x = vertex.x;
-                position.y = vertex.y;
-
-                // Stop on arrival or collision
-                if (arrived(goal) || collision()) {
-                    Application::Logger::log(__PRETTY_FUNCTION__ + std::string(": arrived or collision"));
-                    driving = false;
-                }
-
-                notifyObservers();
-
-                // If there is no sleep_for here the robot will immediately be on its destination....
-               sendPosition();
-                std::this_thread::sleep_for(std::chrono::milliseconds(10)); // @suppress("Avoid magic numbers")
-
-                // this should be the last thing in the loop
-                if (driving == false) {
-                    break;
-                }
-            } // while
-        }
-        catch (std::exception &e) {
-            Application::Logger::log(__PRETTY_FUNCTION__ + std::string(": ") + e.what());
-            std::cerr << __PRETTY_FUNCTION__ << ": " << e.what() << std::endl;
-        }
-        catch (...) {
-            Application::Logger::log(__PRETTY_FUNCTION__ + std::string(": unknown exception"));
-            std::cerr << __PRETTY_FUNCTION__ << ": unknown exception" << std::endl;
+            notifyObservers();
+            sendPosition();
         }
     }
 

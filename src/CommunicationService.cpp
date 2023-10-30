@@ -151,18 +151,12 @@ namespace Messaging
 	 */
 	void CommunicationService::restart()
 	{
-		if(io_contextThread.joinable())
-		{
-			io_contextThread.detach();
-		}
-		start_io_context_thread();
 	}
 	/**
 	 *
 	 */
 	void CommunicationService::wait()
 	{
-		io_contextThread.join();
 	}
 
 	/**
@@ -171,63 +165,36 @@ namespace Messaging
 	CommunicationService::CommunicationService() : 	timer( io_context)
 
 	{
-		start_io_context_thread();
 	}
 	/**
 	 *
 	 */
 	CommunicationService::~CommunicationService()
 	{
-		if(io_contextThread.joinable())
-		{
-			io_contextThread.detach();
-		}
 	}
-	/**
-	 *
-	 */
-	/**
-	 *
-	 */
-	void CommunicationService::start_io_context_thread()
-	{
-		std::thread new_io_contextThread([this]{run_io_context();});
-		io_contextThread.swap(new_io_contextThread);
-		//io_contextThread.detach();
-	}
-	/**
-	 *
-	 */
-	void CommunicationService::run_io_context()
-	{
-		if(io_context.stopped())
-		{
-			io_context.restart();
-		}
 
-		// @see https://www.boost.org/doc/libs/1_76_0/doc/html/boost_asio/reference/io_context.html
-		// for the loop and the work...
-		for(;;)
-		{
-			try
-			{
-				auto work = boost::asio::require(io_context.get_executor(), boost::asio::execution::outstanding_work.tracked);
-				io_context.run();
-				break;
-			}
-			catch (std::exception& e)
-			{
-				std::ostringstream os;
-				os << "Exception in " << __PRETTY_FUNCTION__ << ": " << e.what();
-				TRACE_DEVELOP(os.str());
-			}
-			catch (...)
-			{
-				std::ostringstream os;
-				os << "Unknown exception in " << __PRETTY_FUNCTION__ ;
-				TRACE_DEVELOP(os.str());
-			}
-		}
-	}
+    void CommunicationService::step() {
+        if(io_context.stopped())
+        {
+            io_context.restart();
+        }
+
+        try
+        {
+            io_context.poll();
+        }
+        catch (std::exception& e)
+        {
+            std::ostringstream os;
+            os << "Exception in " << __PRETTY_FUNCTION__ << ": " << e.what();
+            TRACE_DEVELOP(os.str());
+        }
+        catch (...)
+        {
+            std::ostringstream os;
+            os << "Unknown exception in " << __PRETTY_FUNCTION__ ;
+            TRACE_DEVELOP(os.str());
+        }
+    }
 
 } /* namespace Base */

@@ -107,4 +107,4 @@ namespace Application
 	//	class MainApplication
 } // namespace Application
 
-#endif // MAINAPPLICATION_HPP_
+#endif // MAINAPPLICATION_HPP_

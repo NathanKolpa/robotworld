@@ -39,6 +39,13 @@ namespace Application
         ID_STDCOUT_TRACE_FUNCTION, 			//!< ID_STDCOUT_TRACE_FUNCTION
         ID_FILE_TRACE_FUNCTION 				//!< ID_FILE_TRACE_FUNCTION
     };
+
+    const int TIMER_ID = 1;
+
+    wxBEGIN_EVENT_TABLE(MainFrameWindow, wxFrame)
+    EVT_TIMER(TIMER_ID, MainFrameWindow::step)
+    wxEND_EVENT_TABLE()
+
     /**
      *
      */
@@ -56,7 +63,8 @@ namespace Application
             drawOpenSetCheckbox(nullptr),
             speedSpinCtrl(nullptr),
             worldNumber(nullptr),
-            buttonPanel( nullptr)
+            buttonPanel( nullptr),
+            timer(this, TIMER_ID)
     {
         initialise();
     }
@@ -97,6 +105,8 @@ namespace Application
 
         // By default we use the WidgettraceFunction as we expect that this is what the user wants....
         Base::Trace::setTraceFunction( std::make_unique<Application::WidgetTraceFunction>(logTextCtrl));
+
+        timer.Start(10);
     }
     /**
      *
@@ -688,6 +698,12 @@ namespace Application
     /**
      *
      */
+
+    void MainFrameWindow::step(wxTimerEvent& event) {
+        Model::RobotWorld::getRobotWorld().step(event.GetInterval());
+        Messaging::CommunicationService::getCommunicationService().step();
+    }
+
     void MainFrameWindow::showGridFor(wxPanel* aPanel, wxGridBagSizer* aSizer)
     {
         aPanel->Bind(wxEVT_PAINT,[aPanel,aSizer](wxPaintEvent& /*event*/)

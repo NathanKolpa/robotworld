@@ -260,7 +260,9 @@ namespace Model
 
             void sendMessage(const Messaging::Message& msg);
             void recalculate();
-		protected:
+
+            void step(int msInterval);
+    protected:
 			/**
 			 *
 			 */
@@ -325,17 +327,11 @@ namespace Model
 			/**
 			 *
 			 */
-			std::thread robotThread;
-			/**
-			 *
-			 */
-			mutable std::recursive_mutex robotMutex;
-			/**
-			 *
-			 */
 			Messaging::ServerPtr server;
 
             bool isMaster = false;
+
+            unsigned int pathPoint = 0;
 	};
 } // namespace Model
 #endif // ROBOT_HPP_

@@ -4,6 +4,7 @@
 #include "Config.hpp"
 
 #include "Widgets.hpp"
+#include <wx-3.2/wx/timer.h>
 
 namespace Base
 {
@@ -92,6 +93,9 @@ namespace Application
 
 			wxPanel* buttonPanel;
 
+            wxTimer timer;
+            wxDECLARE_EVENT_TABLE();
+
 			void OnQuit( wxCommandEvent& anEvent);
 			void OnWidgetTraceFunction( wxCommandEvent& anEvent);
 			void OnStdOutTraceFunction( wxCommandEvent& anEvent);
@@ -101,6 +105,8 @@ namespace Application
 			void OnDrawOpenSet( wxCommandEvent& anEvent);
 			void OnSpeedSpinCtrlUpdate( wxCommandEvent& anEvent);
 			void OnWorld( wxCommandEvent& anEvent);
+
+            void step(wxTimerEvent& event);
 
 
 			void OnStartRobot( wxCommandEvent& anEvent);

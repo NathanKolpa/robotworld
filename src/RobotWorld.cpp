@@ -383,6 +383,14 @@ namespace Model {
         notifyObservers();
     }
 
+    void RobotWorld::step(int msInterval)
+    {
+        for (RobotPtr robot : robots) {
+            robot->step(msInterval);
+        }
+    }
+
+
     /**
      *
      */
