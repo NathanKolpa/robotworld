@@ -416,11 +416,6 @@ namespace Model {
             case Messaging::SynchronizeRobot: {
 
             }
-            case Messaging::CreateRobot: {
-                Messaging::CreateRobotMessage
-                const std::string &aName,
-                const wxPoint &aPosition
-            }
             default: {
                 TRACE_DEVELOP(__PRETTY_FUNCTION__ + std::string(": default not implemented"));
                 break;
