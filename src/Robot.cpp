@@ -147,6 +147,13 @@ namespace Model {
      *
      */
     void Robot::startActing() {
+        isMaster = true;
+        startActingAsSlave();
+    }
+
+    void Robot::startActingAsSlave() {
+        // we ""prevent"" seg faults with this sleep.
+        std::this_thread::sleep_for(std::chrono::milliseconds(10)); // @suppress("Avoid magic numbers")
         acting = true;
         std::thread newRobotThread([this] { startDriving(); });
         robotThread.swap(newRobotThread);
@@ -165,13 +172,21 @@ namespace Model {
      *
      */
     void Robot::startDriving() {
+        if (isMaster) {
+            syncWorld();
+            sendStart();
+        }
+
         driving = true;
 
         goal = RobotWorld::getRobotWorld().getGoal("Goal");
-        calculateRoute(goal);
-        syncWorld();
+        recalculate();
 
         drive();
+    }
+
+    void Robot::recalculate() {
+        calculateRoute(goal);
     }
 
     /**
@@ -336,6 +351,8 @@ namespace Model {
         }
     }
 
+    static std::mutex wallUpdateMutex;
+
     /**
      *
      */
@@ -360,9 +377,15 @@ namespace Model {
                 aMessage.setBody("Messaging::EchoResponse: " + aMessage.asString());
                 break;
             }
+            case Messaging::Start: {
+                if (!acting) {
+                    TRACE_DEVELOP("Start on request of other");
+                    startActingAsSlave();
+                }
+                aMessage.setMessageType(Messaging::EchoResponse);
+                break;
+            }
             case Messaging::SynchronizeWall: {
-                syncWorld();
-
                 Messaging::SyncWallMessage wallMessage(aMessage.getBody());
 
                 WallPtr wall = RobotWorld::getRobotWorld().getWall(wallMessage.getId());
@@ -378,6 +401,8 @@ namespace Model {
 
                 // trigger a redraw of the canvas through some callback spaghetti.
                 notifyObservers();
+                aMessage.setMessageType(Messaging::EchoResponse);
+                recalculate();
 
                 break;
             }
@@ -438,7 +463,7 @@ namespace Model {
         try {
             // The runtime value always wins!!
             speed = static_cast<float>(Application::MainApplication::getSettings().getSpeed()) /
-                    static_cast<double>(10.0);
+                    static_cast<float>(10.0);
 
             // Compare a float/double with another float/double: use epsilon...
             if (std::fabs(speed - 0.0) <= std::numeric_limits<float>::epsilon()) {
@@ -511,6 +536,12 @@ namespace Model {
             return true;
         }
         return false;
+    }
+
+    void Robot::sendStart() {
+        Messaging::Message msg;
+        msg.setMessageType(Messaging::Start);
+        sendMessage(msg);
     }
 
     void Robot::syncWorld() {

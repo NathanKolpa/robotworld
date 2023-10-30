@@ -25,6 +25,9 @@ namespace Model
 									const wxPoint& aPosition /*= wxPoint(-1,-1)*/,
 									bool aNotifyObservers /*= true*/)
 	{
+        std::lock_guard<std::mutex> guard(worldMutex);
+
+
 		RobotPtr robot = std::make_shared<Robot>( aName, aPosition);
 		robots.push_back( robot);
 		if (aNotifyObservers == true)
@@ -40,7 +43,9 @@ namespace Model
 											const wxPoint& aPosition /*= wxPoint(-1,-1)*/,
 											bool aNotifyObservers /*= true*/)
 	{
-		WayPointPtr wayPoint(new WayPoint( aName, aPosition));
+        std::lock_guard<std::mutex> guard(worldMutex);
+
+        WayPointPtr wayPoint(new WayPoint( aName, aPosition));
 		wayPoints.push_back( wayPoint);
 		if (aNotifyObservers == true)
 		{
@@ -55,7 +60,9 @@ namespace Model
 									const wxPoint& aPosition /*= wxPoint(-1,-1)*/,
 									bool aNotifyObservers /*= true*/)
 	{
-		GoalPtr goal = std::make_shared<Goal>( aName, aPosition);
+        std::lock_guard<std::mutex> guard(worldMutex);
+
+        GoalPtr goal = std::make_shared<Goal>( aName, aPosition);
 		goals.push_back( goal);
 		if (aNotifyObservers == true)
 		{
@@ -70,13 +77,14 @@ namespace Model
 								const wxPoint& aPoint2,
 								bool aNotifyObservers /*= true*/)
 	{
-		WallPtr wall = std::make_shared<Wall>( aPoint1, aPoint2);
+        WallPtr wall = std::make_shared<Wall>( aPoint1, aPoint2);
         addWall(wall, aNotifyObservers);
         return wall;
 	}
 
 
     void RobotWorld::addWall(WallPtr wall, bool aNotifyObservers) {
+        std::lock_guard<std::mutex> guard(worldMutex);
         walls.push_back(wall);
         if (aNotifyObservers == true)
         {
@@ -90,6 +98,8 @@ namespace Model
 	void RobotWorld::deleteRobot( 	RobotPtr aRobot,
 									bool aNotifyObservers /*= true*/)
 	{
+        std::lock_guard<std::mutex> guard(worldMutex);
+
 		auto i = std::find_if( robots.begin(), robots.end(), [aRobot](RobotPtr r)
 							   {
 									return aRobot->getName() == r->getName();
@@ -109,6 +119,8 @@ namespace Model
 	void RobotWorld::deleteWayPoint( 	WayPointPtr aWayPoint,
 										bool aNotifyObservers /*= true*/)
 	{
+        std::lock_guard<std::mutex> guard(worldMutex);
+
 		auto i = std::find_if( wayPoints.begin(), wayPoints.end(), [aWayPoint]( WayPointPtr w)
 							   {
 									return aWayPoint->getName() == w->getName();
@@ -128,6 +140,8 @@ namespace Model
 	void RobotWorld::deleteGoal( 	GoalPtr aGoal,
 									bool aNotifyObservers /*= true*/)
 	{
+        std::lock_guard<std::mutex> guard(worldMutex);
+
 		auto i = std::find_if( goals.begin(), goals.end(), [aGoal]( GoalPtr g)
 							   {
 			return aGoal->getName() == g->getName();
@@ -148,6 +162,8 @@ namespace Model
 	void RobotWorld::deleteWall( 	WallPtr aWall,
 									bool aNotifyObservers /*= true*/)
 	{
+        std::lock_guard<std::mutex> guard(worldMutex);
+
 		auto i = std::find_if( walls.begin(), walls.end(), [aWall]( WallPtr w)
 							   {
 			return
@@ -167,8 +183,10 @@ namespace Model
 	/**
 	 *
 	 */
-	RobotPtr RobotWorld::getRobot( const std::string& aName) const
+	RobotPtr RobotWorld::getRobot( const std::string& aName)
 	{
+        std::lock_guard<std::mutex> guard(worldMutex);
+
 		if(	auto i = std::find_if(robots.begin(),robots.end(),[&aName](RobotPtr robot){return robot->getName() == aName;});
 			i != robots.end())
 		{
@@ -179,8 +197,10 @@ namespace Model
 	/**
 	 *
 	 */
-	RobotPtr RobotWorld::getRobot( const Base::ObjectId& anObjectId) const
+	RobotPtr RobotWorld::getRobot( const Base::ObjectId& anObjectId)
 	{
+        std::lock_guard<std::mutex> guard(worldMutex);
+
 		if(	auto i = std::find_if(robots.begin(),robots.end(),[&anObjectId](RobotPtr robot){return robot->getObjectId() == anObjectId;});
 			i != robots.end())
 		{
@@ -191,8 +211,10 @@ namespace Model
 	/**
 	 *
 	 */
-	WayPointPtr RobotWorld::getWayPoint( const std::string& aName) const
+	WayPointPtr RobotWorld::getWayPoint( const std::string& aName)
 	{
+        std::lock_guard<std::mutex> guard(worldMutex);
+
 		if(	auto i = std::find_if(wayPoints.begin(),wayPoints.end(),[&aName](WayPointPtr wayPoint){return wayPoint->getName() == aName;});
 			i != wayPoints.end())
 		{
@@ -203,8 +225,10 @@ namespace Model
 	/**
 	 *
 	 */
-	WayPointPtr RobotWorld::getWayPoint( const Base::ObjectId& anObjectId) const
+	WayPointPtr RobotWorld::getWayPoint( const Base::ObjectId& anObjectId)
 	{
+        std::lock_guard<std::mutex> guard(worldMutex);
+
 		if(	auto i = std::find_if(wayPoints.begin(),wayPoints.end(),[&anObjectId](WayPointPtr wayPoint){return wayPoint->getObjectId() == anObjectId;});
 			i != wayPoints.end())
 		{
@@ -215,8 +239,10 @@ namespace Model
 	/**
 	 *
 	 */
-	GoalPtr RobotWorld::getGoal( const std::string& aName) const
+	GoalPtr RobotWorld::getGoal( const std::string& aName)
 	{
+        std::lock_guard<std::mutex> guard(worldMutex);
+
 		if(	auto i = std::find_if(goals.begin(),goals.end(),[&aName](GoalPtr goal){return goal->getName() == aName;});
 			i != goals.end())
 		{
@@ -227,8 +253,10 @@ namespace Model
 	/**
 	 *
 	 */
-	GoalPtr RobotWorld::getGoal( const Base::ObjectId& anObjectId) const
+	GoalPtr RobotWorld::getGoal( const Base::ObjectId& anObjectId)
 	{
+        std::lock_guard<std::mutex> guard(worldMutex);
+
 		if(	auto i = std::find_if(goals.begin(),goals.end(),[&anObjectId](GoalPtr goal){return goal->getObjectId() == anObjectId;});
 			i != goals.end())
 		{
@@ -239,8 +267,10 @@ namespace Model
 	/**
 	 *
 	 */
-	WallPtr RobotWorld::getWall( const Base::ObjectId& anObjectId) const
+	WallPtr RobotWorld::getWall( const Base::ObjectId& anObjectId)
 	{
+        std::lock_guard<std::mutex> guard(worldMutex);
+
 		if(	auto i = std::find_if(walls.begin(),walls.end(),[&anObjectId](WallPtr wall){return wall->getObjectId() == anObjectId;});
 			i != walls.end())
 		{

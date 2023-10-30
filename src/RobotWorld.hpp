@@ -7,6 +7,7 @@
 #include "Widgets.hpp"
 
 #include <vector>
+#include <mutex>
 
 namespace Model
 {
@@ -85,31 +86,31 @@ namespace Model
 			/**
 			 *
 			 */
-			RobotPtr getRobot( const std::string& aName) const;
+			RobotPtr getRobot( const std::string& aName);
 			/**
 			 *
 			 */
-			RobotPtr getRobot( const Base::ObjectId& anObjectId) const;
+			RobotPtr getRobot( const Base::ObjectId& anObjectId);
 			/**
 			 *
 			 */
-			WayPointPtr getWayPoint( const std::string& aName) const;
+			WayPointPtr getWayPoint( const std::string& aName);
 			/**
 			 *
 			 */
-			WayPointPtr getWayPoint( const Base::ObjectId& anObjectId) const;
+			WayPointPtr getWayPoint( const Base::ObjectId& anObjectId);
 			/**
 			 *
 			 */
-			GoalPtr getGoal( const std::string& aName) const;
+			GoalPtr getGoal( const std::string& aName);
 			/**
 			 *
 			 */
-			GoalPtr getGoal( const Base::ObjectId& anObjectId) const;
+			GoalPtr getGoal( const Base::ObjectId& anObjectId);
 			/**
 			 *
 			 */
-			WallPtr getWall( const Base::ObjectId& anObjectId) const;
+			WallPtr getWall( const Base::ObjectId& anObjectId);
 			/**
 			 *
 			 */
@@ -177,6 +178,8 @@ namespace Model
 			mutable std::vector< WayPointPtr > wayPoints;
 			mutable std::vector< GoalPtr > goals;
 			mutable std::vector< WallPtr > walls;
+
+            std::mutex worldMutex;
 	};
 } // namespace Model
 #endif // ROBOTWORLD_HPP_

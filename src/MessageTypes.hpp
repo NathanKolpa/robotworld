@@ -21,7 +21,8 @@ namespace Messaging
 		GenericResponse,
 		EchoRequest,
 		EchoResponse,
-        SynchronizeWall
+        SynchronizeWall,
+        Start
 	};
 	//@}
 } /* namespace Messaging */
