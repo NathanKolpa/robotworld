@@ -254,6 +254,7 @@ namespace Model
 
             void syncWorld();
             void sendStart();
+            void sendReset();
             void startActingAsSlave();
 
             void sendMessage(const Messaging::Message& msg);

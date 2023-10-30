@@ -83,6 +83,8 @@ namespace Model
 			 */
 			void deleteWall( 	WallPtr aWall,
 								bool aNotifyObservers = true);
+
+            void resetWorld(bool aNotifyObservers = true);
 			/**
 			 *
 			 */

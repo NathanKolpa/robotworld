@@ -180,7 +180,19 @@ namespace Model
 			}
 		}
 	}
-	/**
+
+    void RobotWorld::resetWorld(bool aNotifyObservers) {
+        std::lock_guard<std::mutex> guard(worldMutex);
+
+        walls.clear();
+
+        if (aNotifyObservers == true)
+        {
+            notifyObservers();
+        }
+    }
+
+    /**
 	 *
 	 */
 	RobotPtr RobotWorld::getRobot( const std::string& aName)
