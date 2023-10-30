@@ -22,7 +22,8 @@ namespace Messaging
 		EchoRequest,
 		EchoResponse,
         SynchronizeWall,
-        SynchronizeRobot
+        SynchronizeRobot,
+        Start
 	};
 	//@}
 } /* namespace Messaging */

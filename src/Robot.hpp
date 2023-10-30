@@ -253,8 +253,11 @@ namespace Model
 			//@}
 
             void syncWorld();
+            void sendStart();
+            void startActingAsSlave();
 
             void sendMessage(const Messaging::Message& msg);
+            void recalculate();
 		protected:
 			/**
 			 *
@@ -329,6 +332,8 @@ namespace Model
 			 *
 			 */
 			Messaging::ServerPtr server;
+
+            bool isMaster = false;
 	};
 } // namespace Model
 #endif // ROBOT_HPP_
