@@ -113,6 +113,7 @@ am_robotworld_OBJECTS = robotworld-AStar.$(OBJEXT) \
 	robotworld-LineShape.$(OBJEXT) robotworld-Logger.$(OBJEXT) \
 	robotworld-LogTextCtrl.$(OBJEXT) robotworld-Main.$(OBJEXT) \
 	robotworld-SyncWallMessage.$(OBJEXT) \
+	robotworld-SyncRobotMessage.$(OBJEXT) \
 	robotworld-MainApplication.$(OBJEXT) \
 	robotworld-MainFrameWindow.$(OBJEXT) \
 	robotworld-MainSettings.$(OBJEXT) \
@@ -186,6 +187,7 @@ am__depfiles_remade = ./$(DEPDIR)/robotworld-AStar.Po \
 	./$(DEPDIR)/robotworld-Server.Po \
 	./$(DEPDIR)/robotworld-Shape2DUtils.Po \
 	./$(DEPDIR)/robotworld-StdOutTraceFunction.Po \
+	./$(DEPDIR)/robotworld-SyncRobotMessage.Po \
 	./$(DEPDIR)/robotworld-SyncWallMessage.Po \
 	./$(DEPDIR)/robotworld-Trace.Po \
 	./$(DEPDIR)/robotworld-ViewObject.Po \
@@ -436,6 +438,7 @@ robotworld_SOURCES = AStar.cpp	\
 						LogTextCtrl.cpp	\
 						Main.cpp	\
 						SyncWallMessage.cpp \
+						SyncRobotMessage.cpp \
 						MainApplication.cpp	\
 						MainFrameWindow.cpp	\
 						MainSettings.cpp	\
@@ -603,6 +606,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-Server.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-Shape2DUtils.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-StdOutTraceFunction.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-SyncRobotMessage.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-SyncWallMessage.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-Trace.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/robotworld-ViewObject.Po@am__quote@ # am--include-marker
@@ -796,6 +800,20 @@ robotworld-SyncWallMessage.obj: SyncWallMessage.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='SyncWallMessage.cpp' object='robotworld-SyncWallMessage.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(robotworld_CPPFLAGS) $(CPPFLAGS) $(robotworld_CXXFLAGS) $(CXXFLAGS) -c -o robotworld-SyncWallMessage.obj `if test -f 'SyncWallMessage.cpp'; then $(CYGPATH_W) 'SyncWallMessage.cpp'; else $(CYGPATH_W) '$(srcdir)/SyncWallMessage.cpp'; fi`
+
+robotworld-SyncRobotMessage.o: SyncRobotMessage.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(robotworld_CPPFLAGS) $(CPPFLAGS) $(robotworld_CXXFLAGS) $(CXXFLAGS) -MT robotworld-SyncRobotMessage.o -MD -MP -MF $(DEPDIR)/robotworld-SyncRobotMessage.Tpo -c -o robotworld-SyncRobotMessage.o `test -f 'SyncRobotMessage.cpp' || echo '$(srcdir)/'`SyncRobotMessage.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/robotworld-SyncRobotMessage.Tpo $(DEPDIR)/robotworld-SyncRobotMessage.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='SyncRobotMessage.cpp' object='robotworld-SyncRobotMessage.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(robotworld_CPPFLAGS) $(CPPFLAGS) $(robotworld_CXXFLAGS) $(CXXFLAGS) -c -o robotworld-SyncRobotMessage.o `test -f 'SyncRobotMessage.cpp' || echo '$(srcdir)/'`SyncRobotMessage.cpp
+
+robotworld-SyncRobotMessage.obj: SyncRobotMessage.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(robotworld_CPPFLAGS) $(CPPFLAGS) $(robotworld_CXXFLAGS) $(CXXFLAGS) -MT robotworld-SyncRobotMessage.obj -MD -MP -MF $(DEPDIR)/robotworld-SyncRobotMessage.Tpo -c -o robotworld-SyncRobotMessage.obj `if test -f 'SyncRobotMessage.cpp'; then $(CYGPATH_W) 'SyncRobotMessage.cpp'; else $(CYGPATH_W) '$(srcdir)/SyncRobotMessage.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/robotworld-SyncRobotMessage.Tpo $(DEPDIR)/robotworld-SyncRobotMessage.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='SyncRobotMessage.cpp' object='robotworld-SyncRobotMessage.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(robotworld_CPPFLAGS) $(CPPFLAGS) $(robotworld_CXXFLAGS) $(CXXFLAGS) -c -o robotworld-SyncRobotMessage.obj `if test -f 'SyncRobotMessage.cpp'; then $(CYGPATH_W) 'SyncRobotMessage.cpp'; else $(CYGPATH_W) '$(srcdir)/SyncRobotMessage.cpp'; fi`
 
 robotworld-MainApplication.o: MainApplication.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(robotworld_CPPFLAGS) $(CPPFLAGS) $(robotworld_CXXFLAGS) $(CXXFLAGS) -MT robotworld-MainApplication.o -MD -MP -MF $(DEPDIR)/robotworld-MainApplication.Tpo -c -o robotworld-MainApplication.o `test -f 'MainApplication.cpp' || echo '$(srcdir)/'`MainApplication.cpp
@@ -1306,6 +1324,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/robotworld-Server.Po
 	-rm -f ./$(DEPDIR)/robotworld-Shape2DUtils.Po
 	-rm -f ./$(DEPDIR)/robotworld-StdOutTraceFunction.Po
+	-rm -f ./$(DEPDIR)/robotworld-SyncRobotMessage.Po
 	-rm -f ./$(DEPDIR)/robotworld-SyncWallMessage.Po
 	-rm -f ./$(DEPDIR)/robotworld-Trace.Po
 	-rm -f ./$(DEPDIR)/robotworld-ViewObject.Po
@@ -1387,6 +1406,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/robotworld-Server.Po
 	-rm -f ./$(DEPDIR)/robotworld-Shape2DUtils.Po
 	-rm -f ./$(DEPDIR)/robotworld-StdOutTraceFunction.Po
+	-rm -f ./$(DEPDIR)/robotworld-SyncRobotMessage.Po
 	-rm -f ./$(DEPDIR)/robotworld-SyncWallMessage.Po
 	-rm -f ./$(DEPDIR)/robotworld-Trace.Po
 	-rm -f ./$(DEPDIR)/robotworld-ViewObject.Po

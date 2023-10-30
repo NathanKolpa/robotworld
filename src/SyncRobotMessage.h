@@ -9,8 +9,8 @@
 #include "BoundedVector.hpp"
 
 namespace Messaging {
-
     class SyncRobotMessage {
+    public:
         SyncRobotMessage(const std::string &message);
         SyncRobotMessage(const Model::Robot robot);
         SyncRobotMessage(const std::string &aName, const wxPoint aPosition, Model::BoundedVector aFront);

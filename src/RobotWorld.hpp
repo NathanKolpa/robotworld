@@ -66,7 +66,8 @@ namespace Model
 			/**
 			 *
 			 */
-			void deleteRobot( 	RobotPtr aRobot,
+			void addRobot(RobotPtr robot, bool aNotifyObservers = true);
+            void deleteRobot( 	RobotPtr aRobot,
 								bool aNotifyObservers = true);
 			/**
 			 *

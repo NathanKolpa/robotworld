@@ -416,7 +416,7 @@ namespace Model {
             case Messaging::SynchronizeRobot: {
                 Messaging::SyncRobotMessage robotMessage(aMessage.getBody());
 
-                Robot robot = RobotWorld::getRobotWorld().getRobot(robotMessage.getName());
+                RobotPtr robot = RobotWorld::getRobotWorld().getRobot(robotMessage.getName());
                 if(robot) {
                     robotMessage.updateRobot(*robot);
                 }

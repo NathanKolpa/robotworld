@@ -82,17 +82,25 @@ namespace Model
         return wall;
 	}
 
-
     void RobotWorld::addWall(WallPtr wall, bool aNotifyObservers) {
         std::lock_guard<std::mutex> guard(worldMutex);
         walls.push_back(wall);
-        if (aNotifyObservers == true)
+        if (aNotifyObservers)
         {
             notifyObservers();
         }
     }
 
-	/**
+
+    void RobotWorld::addRobot(RobotPtr robot, bool aNotifyObservers){
+        std::lock_guard<std::mutex> guard(worldMutex);
+        robots.push_back(robot);
+        if (aNotifyObservers)
+        {
+            notifyObservers();
+        }
+    }
+    /**
 	 *
 	 */
 	void RobotWorld::deleteRobot( 	RobotPtr aRobot,
@@ -107,7 +115,7 @@ namespace Model
 		if (i != robots.end())
 		{
 			robots.erase( i);
-			if (aNotifyObservers == true)
+			if (aNotifyObservers)
 			{
 				notifyObservers();
 			}
@@ -128,7 +136,7 @@ namespace Model
 		if (i != wayPoints.end())
 		{
 			wayPoints.erase( i);
-			if (aNotifyObservers == true)
+			if (aNotifyObservers)
 			{
 				notifyObservers();
 			}
@@ -150,7 +158,7 @@ namespace Model
 		{
 			goals.erase( i);
 
-			if (aNotifyObservers == true)
+			if (aNotifyObservers)
 			{
 				notifyObservers();
 			}
@@ -174,7 +182,7 @@ namespace Model
 		{
 			walls.erase( i);
 
-			if (aNotifyObservers == true)
+			if (aNotifyObservers)
 			{
 				notifyObservers();
 			}
@@ -186,7 +194,7 @@ namespace Model
 
         walls.clear();
 
-        if (aNotifyObservers == true)
+        if (aNotifyObservers)
         {
             notifyObservers();
         }
