@@ -241,7 +241,12 @@ namespace Model {
             localPort = Application::MainApplication::getArg("-remote_port").value;
         }
 
-        Messaging::Client client("localhost",
+        std::string remoteIp = "localhost";
+        if (Application::MainApplication::isArgGiven("-remote_ip")) {
+            localPort = Application::MainApplication::getArg("-remote_ip").value;
+        }
+
+        Messaging::Client client(remoteIp,
                                  static_cast<unsigned short>(std::stoi(localPort)),
                                  toPtr<Robot>());
 
