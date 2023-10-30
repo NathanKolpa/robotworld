@@ -133,8 +133,8 @@ namespace Model
 			/**
 			 *
 			 */
-			void populate( int aNumberOfWalls = 2);
-			/**
+			void populate(int worldCase);
+        /**
 			 *
 			 */
 			void unpopulate( bool aNotifyObservers = true);
