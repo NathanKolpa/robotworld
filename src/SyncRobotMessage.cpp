@@ -24,10 +24,31 @@ namespace Messaging {
         is >> position.x >> position.y >> front.x >> front.y;
     }
 
+    wxPoint getPosition() const{
+        return position;
+    }
+
+    Model::BoundedVector getFront() const{
+        return front;
+    }
+
+    std::string getName() const{
+        return name;
+    }
+
+    void updateRobot(Model::Robot& robot) const {
+        robot.setFront(getFront());
+        robot.setPosition(getPosition());
+    };
+
+    Model::RobotPtr newRobot() const {
+        return std::make_shared<Model::Robot>(getName(), getPosition(), getFront());
+    };
+
     void SyncRobotMessage::fillMessage(Messaging::Message &msg) const {
         std::stringstream ss;
 
-        ss << name << "#" << position.x << " " << position.y << " " << front.x << " " << front.y;
+        ss << name.toString() << "#" << position.x << " " << position.y << " " << front.x << " " << front.y;
 
         msg.setMessageType(MessageType::SynchronizeRobot);
         msg.setBody(ss.str());

@@ -408,7 +408,22 @@ namespace Model {
                 break;
             }
             case Messaging::SynchronizeRobot: {
+                Messaging::SyncRobotMessage robotMessage(aMessage.getBody());
 
+                Robot robot = RobotWorld::getRobotWorld().getRobot(robotMessage.getName());
+                if(robot) {
+                    robotMessage.updateRobot(*robot);
+                }
+                else {
+                    Model::RobotPtr robot = robotMessage.newRobot();
+                    RobotWorld::getRobotWorld().addRobot(robot);
+                }
+
+                notifyObservers();
+                aMessage.setMessageType(Messaging::EchoResponse);
+                recalculate();
+
+                break;
             }
             case Messaging::CreateRobot: {
                 Messaging::CreateRobotMessage

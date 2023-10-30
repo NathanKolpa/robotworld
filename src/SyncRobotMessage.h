@@ -21,17 +21,13 @@ namespace Messaging {
 
         void fillMessage(Messaging::Message &msg) const;
 
-        wxPoint getPosition(){
-            return position;
-        }
+        wxPoint getPosition() const;
+        Model::BoundedVector getFront() const;
+        std::string getName() const;
 
-        Model::BoundedVector getFront(){
-            return front;
-        }
+        void updateRobot(Model::Robot& robot) const;
+        Model::RobotPtr newRobot() const;
 
-        std::string getName(){
-            return name;
-        }
 
     protected:
         void parse(const std::string& message);
