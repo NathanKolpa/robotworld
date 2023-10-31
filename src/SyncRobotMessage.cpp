@@ -41,6 +41,7 @@ namespace Messaging {
     void SyncRobotMessage::updateRobot(Model::Robot& robot) const {
         robot.setFront(getFront());
         robot.setPosition(getPosition());
+        robot.updateWalls();
     };
 
     Model::RobotPtr SyncRobotMessage::newRobot() const {

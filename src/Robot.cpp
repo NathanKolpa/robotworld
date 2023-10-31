@@ -184,6 +184,7 @@ namespace Model {
 
     void Robot::recalculate() {
         calculateRoute(goal);
+        pathPoint = 0;
     }
 
     /**
@@ -214,6 +215,20 @@ namespace Model {
                                                          toPtr<Robot>());
             Messaging::CommunicationService::getCommunicationService().registerServer(server);
         }
+    }
+
+
+    int Robot::minDistance() {
+        wxPoint self = position;
+
+        RobotPtr otherRobot = RobotWorld::getRobotWorld().getRobot("Bram");
+        if (!otherRobot) {
+            return std::numeric_limits<int>().max();
+        }
+
+        wxPoint other = otherRobot->position;
+
+        return std::sqrt(std::pow(other.x - self.x, 2) + std::pow(other.y - self.y, 2) * 1.0);
     }
 
     /**
@@ -419,6 +434,11 @@ namespace Model {
                 else {
                     Model::RobotPtr robot = robotMessage.newRobot();
                     RobotWorld::getRobotWorld().addRobot(robot);
+
+                    robot->walls.push_back(RobotWorld::getRobotWorld().newWall(wxPoint(0, 0), wxPoint(0, 0)));
+                    robot->walls.push_back(RobotWorld::getRobotWorld().newWall(wxPoint(0, 0), wxPoint(0, 0)));
+                    robot->walls.push_back(RobotWorld::getRobotWorld().newWall(wxPoint(0, 0), wxPoint(0, 0)));
+                    robot->walls.push_back(RobotWorld::getRobotWorld().newWall(wxPoint(0, 0), wxPoint(0, 0)));
                 }
 
                 notifyObservers();
@@ -463,6 +483,28 @@ namespace Model {
         return os.str();
     }
 
+    void Robot::updateWalls() {
+        if (walls.size() != 4) {
+            return;
+        }
+
+        // front
+        walls[0]->setPoint1(getFrontLeft());
+        walls[0]->setPoint2(getFrontRight());
+
+        // back
+        walls[1]->setPoint1(getBackLeft());
+        walls[1]->setPoint2(getBackRight());
+
+        // left
+        walls[2]->setPoint1(getFrontLeft());
+        walls[2]->setPoint2(getBackLeft());
+
+        // right
+        walls[3]->setPoint1(getFrontRight());
+        walls[3]->setPoint2(getBackRight());
+    }
+
     /**
      *
      */
@@ -478,6 +520,29 @@ namespace Model {
     void Robot::step(int msInterval) {
         if (!driving) {
             return;
+        }
+
+        int avoidModeDist = 70;
+
+        if(inAvoidMode) {
+            if (minDistance() > avoidModeDist) {
+                TRACE_DEVELOP("NOT AVOIDING ANYMORE");
+                inAvoidMode = false;
+            }
+
+            if (!isMaster) {
+                return;
+            }
+        }
+        else {
+            if (minDistance() < avoidModeDist)  {
+                inAvoidMode = true;
+
+                if (isMaster) {
+                    TRACE_DEVELOP("AVOIDING");
+                    recalculate();
+                }
+            }
         }
 
         // The runtime value always wins!!

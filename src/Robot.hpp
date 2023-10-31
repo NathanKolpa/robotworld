@@ -11,6 +11,7 @@
 #include "Observer.hpp"
 #include "Point.hpp"
 #include "Region.hpp"
+#include "Wall.hpp"
 #include "Size.hpp"
 
 #include <iostream>
@@ -262,6 +263,10 @@ namespace Model
             void recalculate();
 
             void step(int msInterval);
+
+            int minDistance();
+
+            void updateWalls();
     protected:
 			/**
 			 *
@@ -332,6 +337,10 @@ namespace Model
             bool isMaster = false;
 
             unsigned int pathPoint = 0;
+
+            std::vector<Model::WallPtr> walls;
+
+            bool inAvoidMode = false;
 	};
 } // namespace Model
 #endif // ROBOT_HPP_

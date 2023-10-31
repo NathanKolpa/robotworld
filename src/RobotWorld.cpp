@@ -342,12 +342,12 @@ namespace Model {
                 break;
 
             case 1:
-                RobotWorld::getRobotWorld().newRobot("Robot", wxPoint(50, 50), false); // @suppress("Avoid magic numbers")
+                RobotWorld::getRobotWorld().newRobot("Robot", wxPoint(100, 100), false); // @suppress("Avoid magic numbers")
                 RobotWorld::getRobotWorld().newGoal("Goal", wxPoint(450, 450), false); // @suppress("Avoid magic numbers")
                 break;
 
             case 2:
-                RobotWorld::getRobotWorld().newRobot("Robot", wxPoint(450, 450), false); // @suppress("Avoid magic numbers")
+                RobotWorld::getRobotWorld().newRobot("Robot", wxPoint(350, 350), false); // @suppress("Avoid magic numbers")
                 RobotWorld::getRobotWorld().newGoal("Goal", wxPoint(50, 50), false); // @suppress("Avoid magic numbers")
                 break;
 
