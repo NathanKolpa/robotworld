@@ -381,7 +381,7 @@ namespace Application
         speedSpinCtrl->SetValue(static_cast<int>(10));
         speedSpinCtrl->Bind(wxEVT_COMMAND_SPINCTRL_UPDATED,[this](wxCommandEvent& event){this->OnSpeedSpinCtrlUpdate(event);});
 
-        std::array<std::string, 7> choicesArray
+        std::array<std::string, 11> choicesArray
                 {
                         "1 Default world",
                         "Case 1 Part 1",
@@ -389,7 +389,11 @@ namespace Application
                         "Case 2 Part 1",
                         "Case 2 Part 2",
                         "Case 3 Part 1",
-                        "Case 3 Part 2"
+                        "Case 3 Part 2",
+                        "Case 4 Part 1",
+                        "Case 4 Part 2",
+                        "Case 5 Part 1",
+                        "Case 5 Part 2"
                 };
 
         sizer->Add(	worldNumber = makeRadiobox(	panel,

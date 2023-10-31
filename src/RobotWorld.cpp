@@ -318,20 +318,22 @@ namespace Model {
      */
     void RobotWorld::populate(int worldCase) {
 
-        RobotWorld::getRobotWorld().newWall(wxPoint(5, 5), wxPoint(5, 495),
-                                            false); // @suppress("Avoid magic numbers")
+        if (worldCase % 2 == 1 || worldCase == 0) {
+            RobotWorld::getRobotWorld().newWall(wxPoint(5, 5), wxPoint(5, 495),
+                                                false); // @suppress("Avoid magic numbers")
 
-        RobotWorld::getRobotWorld().newWall(wxPoint(5, 5), wxPoint(5, 495),
-                                            false); // @suppress("Avoid magic numbers")
+            RobotWorld::getRobotWorld().newWall(wxPoint(5, 5), wxPoint(5, 495),
+                                                false); // @suppress("Avoid magic numbers")
 
-        RobotWorld::getRobotWorld().newWall(wxPoint(5, 495), wxPoint(495, 495),
-                                            false); // @suppress("Avoid magic numbers")
+            RobotWorld::getRobotWorld().newWall(wxPoint(5, 495), wxPoint(495, 495),
+                                                false); // @suppress("Avoid magic numbers")
 
-        RobotWorld::getRobotWorld().newWall(wxPoint(5, 5), wxPoint(495, 5),
-                                            false); // @suppress("Avoid magic numbers")
+            RobotWorld::getRobotWorld().newWall(wxPoint(5, 5), wxPoint(495, 5),
+                                                false); // @suppress("Avoid magic numbers")
 
-        RobotWorld::getRobotWorld().newWall(wxPoint(495, 5), wxPoint(495, 495),
-                                            false); // @suppress("Avoid magic numbers")
+            RobotWorld::getRobotWorld().newWall(wxPoint(495, 5), wxPoint(495, 495),
+                                                false); // @suppress("Avoid magic numbers")
+        }
 
         switch (worldCase) {
             case 0:
@@ -373,8 +375,46 @@ namespace Model {
                 break;
 
             case 6:
+            case 8:
                 RobotWorld::getRobotWorld().newRobot("Robot", wxPoint(450, 450), false); // @suppress("Avoid magic numbers")
                 RobotWorld::getRobotWorld().newGoal("Goal", wxPoint(50, 50), false); // @suppress("Avoid magic numbers")
+                break;
+
+
+            case 7:
+                RobotWorld::getRobotWorld().newRobot("Robot", wxPoint(50, 50), false); // @suppress("Avoid magic numbers")
+                RobotWorld::getRobotWorld().newGoal("Goal", wxPoint(450, 450), false); // @suppress("Avoid magic numbers")
+
+                RobotWorld::getRobotWorld().newWall(wxPoint(7, 264), wxPoint(419, 264),
+                                                    false); // @suppress("Avoid magic numbers")
+
+                RobotWorld::getRobotWorld().newWall(wxPoint(100, 334), wxPoint(493, 334),
+                                                    false); // @suppress("Avoid magic numbers")
+                break;
+
+            case 9:
+                RobotWorld::getRobotWorld().newRobot("Robot", wxPoint(50, 50), false); // @suppress("Avoid magic numbers")
+                RobotWorld::getRobotWorld().newGoal("Goal", wxPoint(450, 450), false); // @suppress("Avoid magic numbers")
+
+                RobotWorld::getRobotWorld().newWall(wxPoint(7, 200), wxPoint(200, 200),
+                                                    false); // @suppress("Avoid magic numbers")
+
+                RobotWorld::getRobotWorld().newWall(wxPoint(493, 200), wxPoint(300, 200),
+                                                    false); // @suppress("Avoid magic numbers")
+
+
+                RobotWorld::getRobotWorld().newWall(wxPoint(200, 150), wxPoint(200, 250),
+                                                    false); // @suppress("Avoid magic numbers")
+
+
+                RobotWorld::getRobotWorld().newWall(wxPoint(300, 150), wxPoint(300, 250),
+                                                    false); // @suppress("Avoid magic numbers")
+
+                break;
+
+            case 10:
+                RobotWorld::getRobotWorld().newRobot("Robot", wxPoint(450, 50), false); // @suppress("Avoid magic numbers")
+                RobotWorld::getRobotWorld().newGoal("Goal", wxPoint(50, 450), false); // @suppress("Avoid magic numbers")
                 break;
         }
 

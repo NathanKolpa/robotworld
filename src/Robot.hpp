@@ -260,7 +260,7 @@ namespace Model
             void sendPosition();
 
             void sendMessage(const Messaging::Message& msg);
-            void recalculate();
+            void recalculate(bool toStart = false);
 
             void step(int msInterval);
 
@@ -275,7 +275,7 @@ namespace Model
 			/**
 			 *
 			 */
-			void calculateRoute( GoalPtr aGoal);
+			void calculateRoute(bool toStart);
 			/**
 			 *
 			 */
@@ -341,6 +341,13 @@ namespace Model
             std::vector<Model::WallPtr> walls;
 
             bool inAvoidMode = false;
+
+            int avoidingForMs = 0;
+
+            wxPoint start;
+
+            bool isBackTracking = false;
+            int backTrackingFor = 0;
 	};
 } // namespace Model
 #endif // ROBOT_HPP_

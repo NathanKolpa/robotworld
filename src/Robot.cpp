@@ -178,13 +178,10 @@ namespace Model {
         pathPoint = 0;
         driving = true;
 
+        start = position;
+
         goal = RobotWorld::getRobotWorld().getGoal("Goal");
         recalculate();
-    }
-
-    void Robot::recalculate() {
-        calculateRoute(goal);
-        pathPoint = 0;
     }
 
     /**
@@ -192,6 +189,11 @@ namespace Model {
      */
     void Robot::stopDriving() {
         driving = false;
+    }
+
+    void Robot::recalculate(bool toStart) {
+        calculateRoute(toStart);
+        pathPoint = 0;
     }
 
     /**
@@ -412,8 +414,7 @@ namespace Model {
                 if (wall) {
                     wallMessage.updateWall(*wall);
                     TRACE_DEVELOP("UPDATING WALL: " + wall->asDebugString());
-                }
-                else {
+                } else {
                     Model::WallPtr wall = wallMessage.newWall();
                     TRACE_DEVELOP("CREATING WALL: " + wall->asDebugString());
                     RobotWorld::getRobotWorld().addWall(wall);
@@ -428,10 +429,9 @@ namespace Model {
                 Messaging::SyncRobotMessage robotMessage(aMessage.getBody());
 
                 RobotPtr robot = RobotWorld::getRobotWorld().getRobot("Bram");
-                if(robot) {
+                if (robot) {
                     robotMessage.updateRobot(*robot);
-                }
-                else {
+                } else {
                     Model::RobotPtr robot = robotMessage.newRobot();
                     RobotWorld::getRobotWorld().addRobot(robot);
 
@@ -524,18 +524,44 @@ namespace Model {
 
         int avoidModeDist = 70;
 
-        if(inAvoidMode) {
+        if (isBackTracking) {
+            backTrackingFor += msInterval;
+
+            if(backTrackingFor > 5000) {
+                backTrackingFor = 0;
+                avoidingForMs = 0;
+                recalculate();
+                isBackTracking = false;
+            }
+
+        } else if (inAvoidMode) {
+            avoidingForMs += msInterval;
+
             if (minDistance() > avoidModeDist) {
                 TRACE_DEVELOP("NOT AVOIDING ANYMORE");
                 inAvoidMode = false;
+                avoidingForMs = 0;
             }
 
             if (!isMaster) {
+                if (avoidingForMs > 8000) {
+                    TRACE_DEVELOP("START BACKTRACKING");
+                    isBackTracking = true;
+                    avoidingForMs = 0;
+                    recalculate(true);
+                }
+
                 return;
             }
-        }
-        else {
-            if (minDistance() < avoidModeDist)  {
+            else {
+                if (avoidingForMs > 100) {
+                    avoidingForMs = 0;
+                    inAvoidMode = false;
+                    recalculate();
+                }
+            }
+        } else if (!isBackTracking) {
+            if (minDistance() < avoidModeDist) {
                 inAvoidMode = true;
 
                 if (isMaster) {
@@ -543,6 +569,10 @@ namespace Model {
                     recalculate();
                 }
             }
+        }
+
+        if (path.size() == 0) {
+            recalculate();
         }
 
         // The runtime value always wins!!
@@ -579,15 +609,22 @@ namespace Model {
     /**
      *
      */
-    void Robot::calculateRoute(GoalPtr aGoal) {
+    void Robot::calculateRoute(bool toStart) {
         path.clear();
+        GoalPtr aGoal = goal;
+
         if (aGoal) {
             // Turn off logging if not debugging AStar
             Application::Logger::setDisable();
 
             front = BoundedVector(aGoal->getPosition(), position);
             //handleNotificationsFor( astar);
-            path = astar.search(position, aGoal->getPosition(), size);
+
+            if (toStart) {
+                path = astar.search(position, start, size);
+            } else {
+                path = astar.search(position, aGoal->getPosition(), size);
+            }
             //stopHandlingNotificationsFor( astar);
 
             Application::Logger::setDisable(false);
