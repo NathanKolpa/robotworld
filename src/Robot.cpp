@@ -252,7 +252,7 @@ namespace Model {
 
         std::string remoteIp = "localhost";
         if (Application::MainApplication::isArgGiven("-remote_ip")) {
-            localPort = Application::MainApplication::getArg("-remote_ip").value;
+            remoteIp = Application::MainApplication::getArg("-remote_ip").value;
         }
 
         Messaging::Client client(remoteIp,
