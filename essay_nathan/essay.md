@@ -117,7 +117,6 @@ In robot world zijn er een aantal singletons:
 
 - `CommunicationService`
 - `RobotWorld`
-- `MainSettings`
 
 ## Strategy
 

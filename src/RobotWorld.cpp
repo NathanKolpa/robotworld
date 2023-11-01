@@ -425,9 +425,9 @@ namespace Model {
 
     void RobotWorld::step(int msInterval)
     {
-        for (RobotPtr robot : robots) {
+        RobotPtr  robot = getRobot("Robot");
+        if (robot)
             robot->step(msInterval);
-        }
     }
 
 
